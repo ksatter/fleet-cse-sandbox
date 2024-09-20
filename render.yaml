@@ -1,0 +1,73 @@
+# Exported from Render on 2024-09-20T21:53:08Z
+services:
+- type: pserv
+  name: fleet-redis
+  runtime: image
+  image:
+    url: docker.io/library/redis:7.2.4
+  plan: starter
+  region: oregon
+- type: pserv
+  name: fleet-mysql
+  runtime: docker
+  repo: https://github.com/render-examples/mysql
+  plan: starter
+  envVars:
+  - key: MYSQL_USER
+    sync: false
+  - key: MYSQL_ROOT_PASSWORD
+    sync: false
+  - key: MYSQL_PASSWORD
+    sync: false
+  - key: MYSQL_DATABASE
+    sync: false
+  region: oregon
+  dockerContext: .
+  dockerfilePath: ./Dockerfile
+  disk:
+    name: mysql
+    mountPath: /var/lib/mysql
+    sizeGB: 10
+- type: web
+  name: fleet
+  runtime: image
+  image:
+    url: docker.io/fleetdm/fleet:latest
+  plan: starter
+  envVars:
+  - key: FLEET_SOFTWARE_INSTALLER_STORE_DIR
+    sync: false
+  - key: FLEET_VULNERABILITIES_DISABLE_SCHEDULE
+    sync: false
+  - key: FLEET_LICENSE_KEY
+    sync: false
+  - key: PORT
+    sync: false
+  - key: FLEET_SERVER_TLS
+    sync: false
+  - key: FLEET_SERVER_PRIVATE_KEY
+    sync: false
+  - key: FLEET_MYSQL_USERNAME
+    sync: false
+  - key: FLEET_MYSQL_PASSWORD
+    sync: false
+  - key: FLEET_MYSQL_DATABASE
+    sync: false
+  - key: FLEET_MYSQL_ADDRESS
+    fromService:
+      name: fleet-mysql
+      type: pserv
+      property: hostport
+  - key: FLEET_REDIS_ADDRESS
+    fromService:
+      name: fleet-redis
+      type: pserv
+      property: hostport
+  region: oregon
+  preDeployCommand: fleet prepare --no-prompt=true db
+  healthCheckPath: /healthz
+  disk:
+    name: disk
+    mountPath: /fleet
+    sizeGB: 10
+version: "1"
