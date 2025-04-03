@@ -18,7 +18,7 @@ org_settings:
       idp_name: Google Workspace
       issuer_uri: ""
       metadata: |-
-        $FLEET_MDM_END_USER_AUTHENTICATION_SSO_METADATA
+        $FLEET_MDM_SSO_METADATA
       metadata_url: ""
   secrets:
     - secret: "$FLEET_GLOBAL_ENROLL_SECRET"
