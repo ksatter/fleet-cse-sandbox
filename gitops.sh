@@ -12,28 +12,32 @@ FLEETCTL="${FLEETCTL:-fleetctl}"
 FLEET_DRY_RUN_ONLY="${FLEET_DRY_RUN_ONLY:-false}"
 FLEET_DELETE_OTHER_TEAMS="${FLEET_DELETE_OTHER_TEAMS:-true}"
 
-# Validate that global file contains org_settings
-grep -Exq "^org_settings:.*" "$FLEET_GLOBAL_FILE"
 
-if compgen -G "$FLEET_GITOPS_DIR"/teams/*.yml > /dev/null; then
-  # Validate that every team has a unique name.
-  # This is a limited check that assumes all team files contain the phrase: `name: <team_name>`
-  ! perl -nle 'print $1 if /^name:\s*(.+)$/' "$FLEET_GITOPS_DIR"/teams/*.yml | sort | uniq -d | grep . -cq
-fi
+echo $FLEET_MDM_SSO_METADATA
 
-args=(-f "$FLEET_GLOBAL_FILE")
-for team_file in "$FLEET_GITOPS_DIR"/teams/*.yml; do
-  args+=(-f "$team_file")
-done
-if [ "$FLEET_DELETE_OTHER_TEAMS" = true ]; then
-  args+=(--delete-other-teams)
-fi
 
-# Dry run
-$FLEETCTL gitops "${args[@]}" --dry-run
-if [ "$FLEET_DRY_RUN_ONLY" = true ]; then
-  exit 0
-fi
+# # Validate that global file contains org_settings
+# grep -Exq "^org_settings:.*" "$FLEET_GLOBAL_FILE"
 
-# Real run
-$FLEETCTL gitops "${args[@]}"
+# if compgen -G "$FLEET_GITOPS_DIR"/teams/*.yml > /dev/null; then
+#   # Validate that every team has a unique name.
+#   # This is a limited check that assumes all team files contain the phrase: `name: <team_name>`
+#   ! perl -nle 'print $1 if /^name:\s*(.+)$/' "$FLEET_GITOPS_DIR"/teams/*.yml | sort | uniq -d | grep . -cq
+# fi
+
+# args=(-f "$FLEET_GLOBAL_FILE")
+# for team_file in "$FLEET_GITOPS_DIR"/teams/*.yml; do
+#   args+=(-f "$team_file")
+# done
+# if [ "$FLEET_DELETE_OTHER_TEAMS" = true ]; then
+#   args+=(--delete-other-teams)
+# fi
+
+# # Dry run
+# $FLEETCTL gitops "${args[@]}" --dry-run
+# if [ "$FLEET_DRY_RUN_ONLY" = true ]; then
+#   exit 0
+# fi
+
+# # Real run
+# $FLEETCTL gitops "${args[@]}"
