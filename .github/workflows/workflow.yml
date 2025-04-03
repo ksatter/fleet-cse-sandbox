@@ -1,11 +1,18 @@
 name: 'Apply latest configuration to Fleet'
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch: # allows manual triggering
+    inputs:
+      working-directory:
+        description: 'The working directory, which should be the root of the fleet-gitops repository.'
+        default: './'
+      dry-run-only:
+        description: 'Whether to only run the fleetctl gitops commands in dry-run mode.'
+        default: 'false'
+      delete-other-teams:
+        description: 'Whether to delete other teams in Fleet which are not part of the gitops config.'
+        default: 'true'
 
 # Prevent concurrent runs of this workflow.
 concurrency:
