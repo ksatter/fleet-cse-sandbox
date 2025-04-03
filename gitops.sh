@@ -12,6 +12,8 @@ FLEETCTL="${FLEETCTL:-fleetctl}"
 FLEET_DRY_RUN_ONLY="${FLEET_DRY_RUN_ONLY:-false}"
 FLEET_DELETE_OTHER_TEAMS="${FLEET_DELETE_OTHER_TEAMS:-true}"
 
+###                       PARSE METADATA                                            ###
+# Adds spaces to all but the first line of metadata to keep multiline string in bounds.
 FLEET_MDM_SSO_METADATA=$( sed '2,$s/^/        /' <<<  "${FLEET_MDM_SSO_METADATA}")
 
 # Validate that global file contains org_settings
