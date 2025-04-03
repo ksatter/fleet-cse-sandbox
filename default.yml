@@ -12,6 +12,13 @@ org_settings:
     server_url: $FLEET_URL
   org_info:
     org_name: Fleet
+  mdm:
+    end_user_authentication:
+      entity_id: dogfood-eula.fleetdm.com
+      idp_name: Google Workspace
+      issuer_uri: ""
+      metadata: |-
+        $FLEET_MDM_SSO_METADATA
+      metadata_url: ""
   secrets:
-    - secret: "$FLEET_GLOBAL_ENROLL_SECRET"
 software:

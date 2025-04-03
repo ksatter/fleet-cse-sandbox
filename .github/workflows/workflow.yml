@@ -1,9 +1,6 @@
 name: 'Apply latest configuration to Fleet'
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch: # allows manual triggering
     inputs:
@@ -50,3 +47,4 @@ jobs:
           FLEET_GLOBAL_ENROLL_SECRET: ${{ secrets.FLEET_GLOBAL_ENROLL_SECRET }}
           FLEET_WORKSTATIONS_ENROLL_SECRET: ${{ secrets.FLEET_WORKSTATIONS_ENROLL_SECRET }}
           FLEET_WORKSTATIONS_CANARY_ENROLL_SECRET: ${{ secrets.FLEET_WORKSTATIONS_CANARY_ENROLL_SECRET }}
+          FLEET_MDM_SSO_METADATA: ${{ secrets.FLEET_MDM_SSO_METADATA }}
