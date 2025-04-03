@@ -16,7 +16,7 @@ FLEET_MDM_SSO_METADATA=$( sed '2,$s/^/        /' <<<  "${FLEET_MDM_SSO_METADATA}
 
 echo "$FLEET_MDM_SSO_METADATA"
 
-
+cat default.yml
 # # Validate that global file contains org_settings
 # grep -Exq "^org_settings:.*" "$FLEET_GLOBAL_FILE"
 
