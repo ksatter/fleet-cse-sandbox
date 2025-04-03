@@ -21,5 +21,4 @@ org_settings:
         $FLEET_MDM_SSO_METADATA
       metadata_url: ""
   secrets:
-    - secret: "$FLEET_GLOBAL_ENROLL_SECRET"
 software:
