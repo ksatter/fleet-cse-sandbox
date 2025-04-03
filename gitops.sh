@@ -13,7 +13,7 @@ FLEET_DRY_RUN_ONLY="${FLEET_DRY_RUN_ONLY:-false}"
 FLEET_DELETE_OTHER_TEAMS="${FLEET_DELETE_OTHER_TEAMS:-true}"
 
 
-echo $FLEET_MDM_SSO_METADATA
+echo "$FLEET_MDM_SSO_METADATA"
 
 
 # # Validate that global file contains org_settings
