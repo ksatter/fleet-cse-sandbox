@@ -1,0 +1,1 @@
+C:\Users\localadmin\AppData\Local\Microsoft\WindowsApps\winget.exe install SlackTechnologies.Slack --silent --accept-package-agreements --accept-source-agreements

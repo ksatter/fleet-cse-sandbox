@@ -1,0 +1,8 @@
+#!/bin/sh
+# Edit the token
+TOKEN="eyJ1cmwiOiAiaHR0cHM6Ly9ldWNlMS1wYXg4LnNlbnRpbmVsb25lLm5ldCIsICJzaXRlX2tleSI6ICI4ZDI0OWE3YTU0MGY4NjMxIn0="
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+echo $TOKEN > $SCRIPT_DIR/"com.sentinelone.registration-token" 
+
+installer -pkg "$INSTALLER_PATH" -verboseR -target /

@@ -1,0 +1,10 @@
+{
+	"Type": "com.apple.configuration.softwareupdate.settings",
+	"Identifier": "5C266161-06D4-45C0-8E20-FF770389C739",
+	"Server Token": "1",
+	"Payload": {
+		"Beta": {
+			"ProgramEnrollment": "AlwaysOff"
+		}
+	}
+}

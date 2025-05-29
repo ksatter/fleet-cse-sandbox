@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/Applications/Falcon.app/Contents/Resources/falconctl license AC1329C89678466F973D9EB7D0FACC10-BE

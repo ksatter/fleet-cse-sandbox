@@ -1,0 +1,5 @@
+$product_code = "{0C3349F2-8365-4BBE-956D-BD943CE809CF}"
+
+# Fleet uninstalls app using product code that's extracted on upload
+msiexec /quiet /x $product_code
+Exit $LASTEXITCODE
