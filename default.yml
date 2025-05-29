@@ -1,17 +1,146 @@
-# For Fleet Free, this file updates policies, queries, agent_options, and controls for all hosts.
-
-# For Fleet Premium, the default.yml file updates policies and queries that run on all hosts ("All teams"). Controls and agent options are updated for hosts on "No team."
-
-policies:
-queries:
 agent_options:
-  path: ./lib/agent-options.yml
-controls:
+  config:
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 10
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+  update_channels:
+    desktop: stable
+    orbit: stable
+    osqueryd: stable
+labels:
+- description:
+  hosts:
+  label_membership_type: manual
+  name: Dale's test label
+- description:
+  label_membership_type: dynamic
+  name: Has Company Portal app
+  platform: darwin
+  query: SELECT 1 FROM apps WHERE name='Company Portal.app';
+- description:
+  label_membership_type: dynamic
+  name: Check if VM
+  query: SELECT 1 FROM os_version WHERE platform LIKE 'virtual';
+- description:
+  label_membership_type: dynamic
+  name: Check if NOT macOS
+  query: SELECT 1 FROM os_version WHERE name NOT like 'macOS';
+- description:
+  hosts:
+  - Dales-MacBook-Pro.local
+  - Dales-Virtual-Machine.local
+  label_membership_type: manual
+  name: Dale's manual label
+- description:
+  label_membership_type: dynamic
+  name: macOS hosts greater than macOS 13
+  platform: darwin
+  query: SELECT 1 FROM os_version WHERE major >= 13;
+- description:
+  label_membership_type: dynamic
+  name: Random 5%
+  query: "SELECT 1 FROM system_info \nWHERE (CAST(SUBSTR(MD5(uuid), 1, 8) AS INTEGER)
+    % 100) < 5;"
 org_settings:
-  server_settings:
-    server_url: $FLEET_URL
+  features:
+    additional_queries: true
+    detail_query_overrides:
+      disk_encryption_linux:
+    enable_host_users: true
+    enable_software_inventory: false
+  fleet_desktop:
+    transparency_url: https://fleetdm.com/transparency
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+    custom_scep_proxy:
+    digicert:
+    google_calendar:
+    jira:
+    ndes_scep_proxy:
+    zendesk:
+  mdm:
+    apple_business_manager:
+    apple_server_url:
+    end_user_authentication:
+      entity_id:
+      idp_name:
+      issuer_uri:
+      metadata:
+      metadata_url:
+    volume_purchasing_program:
   org_info:
-    org_name: Fleet
+    contact_url: https://fleetdm.com/company/contact
+    org_logo_url:
+    org_logo_url_light_background:
+    org_name: Fleet CS
   secrets:
-    - secret: "$FLEET_GLOBAL_ENROLL_SECRET"
-software:
+  - secret: # TODO: Add your enroll secrets here
+  server_settings:
+    ai_features_disabled: false
+    deferred_save_host: false
+    enable_analytics: true
+    live_query_disabled: false
+    query_report_cap: 0
+    query_reports_disabled: false
+    scripts_disabled: false
+    server_url: https://fleet-ishl.onrender.com
+  sso_settings:
+    enable_jit_provisioning: false
+    enable_sso: false
+    enable_sso_idp_login: true
+    entity_id:
+    idp_image_url:
+    idp_name:
+    metadata:
+    metadata_url:
+  webhook_settings:
+    activities_webhook:
+      destination_url: https://webhook.site/becdfe4a-99f8-4a53-b66a-dffac25c183d
+      enable_activities_webhook: true
+    failing_policies_webhook:
+      destination_url: https://webhook.site/40ea6202-037d-4711-bcb3-9bd2822e3ef3
+      enable_failing_policies_webhook: true
+      host_batch_size: 0
+      policy_ids:
+      - 3
+      - 2
+    host_status_webhook:
+      days_count: 0
+      destination_url:
+      enable_host_status_webhook: false
+      host_percentage: 0
+    interval: 24h0m0s
+    vulnerabilities_webhook:
+      destination_url:
+      enable_vulnerabilities_webhook: false
+      host_batch_size: 0
+  yara_rules:
+policies:
+- calendar_events_enabled: false
+  critical: false
+  description: Workstations not enrolled to MDM miss critical security updates and
+    remote management capabilities.
+  name: MDM enrolled (macOS) (All teams)
+  platform: darwin
+  query: SELECT 1 FROM mdm WHERE enrolled='true';
+  resolution: Enroll device to MDM.
+- calendar_events_enabled: false
+  critical: false
+  description: If the firewall is disabled, the workstation is vulnerable to unauthorized
+    network access and attacks.
+  name: Firewall enabled (macOS) (All teams)
+  platform: darwin
+  query: SELECT 1 FROM alf WHERE global_state >= 1;
+  resolution: The firewall will be enabled to protect against external threats.
+queries:

@@ -1,0 +1,238 @@
+agent_options:
+  config:
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 10
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+  update_channels:
+    desktop: stable
+    orbit: stable
+    osqueryd: stable
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  windows_enabled_and_configured: true
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: Policy Bananza
+policies:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 1
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 2
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 3
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 4
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 5
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 6
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 7
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 8
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 9
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 10
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 11
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 12
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 13
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 14
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 15
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 16
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 17
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 18
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 19
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 20
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 21
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 22
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 23
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 24
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Test Policy 25
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 FROM osquery_info WHERE start_time > 1;
+  resolution:
+queries:
+software:
+  packages:
+  - hash_sha256: 4827d3bea7e3856006d75240486731f0bef531875d3b8ee058efc95270a9d79f
+      # webex (Webex.deb) version 
+    install_script:
+      path: ../lib/policy-bananza/scripts/webex-linux-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/policy-bananza/scripts/webex-linux-uninstall
+team_settings:
+  features:
+    enable_host_users: true
+    enable_software_inventory: true
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+  secrets:
+  - secret: # TODO: Add your enroll secrets here
+  webhook_settings:
+    failing_policies_webhook:
+      destination_url:
+      enable_failing_policies_webhook: false
+      host_batch_size: 0
+      policy_ids:
+    host_status_webhook:

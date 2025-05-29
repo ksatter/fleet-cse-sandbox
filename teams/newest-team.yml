@@ -1,0 +1,61 @@
+agent_options:
+  config:
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 10
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+  update_channels:
+    desktop: stable
+    orbit: stable
+    osqueryd: stable
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  windows_enabled_and_configured: true
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: Newest team
+policies:
+queries:
+software:
+team_settings:
+  features:
+    additional_queries:
+      linux_kernel_info: SELECT * FROM file_lines WHERE PATH = "/proc/version"
+      time: SELECT * FROM time
+      windows_kernes_info: SELECT version FROM kernel_info;
+    detail_query_overrides:
+      disk_encryption_linux:
+    enable_host_users: true
+    enable_software_inventory: false
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+  secrets:
+  - secret: # TODO: Add your enroll secrets here
+  webhook_settings:
+    failing_policies_webhook:
+      destination_url:
+      enable_failing_policies_webhook: false
+      host_batch_size: 0
+      policy_ids:
+    host_status_webhook:

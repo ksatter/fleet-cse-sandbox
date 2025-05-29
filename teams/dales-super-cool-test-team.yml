@@ -1,0 +1,230 @@
+agent_options:
+  command_line_flags:
+    disable_endpointsecurity: false
+    disable_endpointsecurity_fim: false
+  config:
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 10
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+  update_channels:
+    orbit: 1.38.1
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_settings:
+    custom_settings:
+    - path: ../lib/dales-super-cool-test-team/profiles/platform-sso.mobileconfig
+    - path: ../lib/dales-super-cool-test-team/profiles/softwareupdatedeclaration.json
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  - path: ../lib/dales-super-cool-test-team/scripts/change_desktop_wallpaper.sh
+  - path: ../lib/dales-super-cool-test-team/scripts/remove_mdm_enrollment.ps1
+  - path: ../lib/dales-super-cool-test-team/scripts/set_dns_cloudflare.sh
+  - path: ../lib/dales-super-cool-test-team/scripts/set_dns_google.sh
+  - path: ../lib/dales-super-cool-test-team/scripts/uninstall-fleetd-macos.sh
+  windows_enabled_and_configured: true
+  windows_settings:
+    custom_settings:
+    - path: ../lib/dales-super-cool-test-team/profiles/officeadmxingest.xml
+    - path: ../lib/dales-super-cool-test-team/profiles/officeupdates.xml
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: Dale's Super Cool Test Team
+policies:
+- calendar_events_enabled: false
+  critical: false
+  description: Possible risks include the laptop not being managed by FleetDM, not
+    receiving updates, or not adhering to security policies. There may also be a risk
+    of unauthorized software or malicious activities being undetected.
+  name: Fleet Desktop Enabled
+  platform: darwin
+  query: SELECT 1 FROM plist WHERE path = '/Library/LaunchDaemons/com.fleetdm.orbit.plist'
+    AND key = 'EnvironmentVariables' AND subkey = 'ORBIT_FLEET_DESKTOP' AND value
+    = 'false';
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Full disk encryption enabled on Linux
+  platform: linux
+  query: SELECT 1 FROM mounts m, disk_encryption d WHERE m.device_alias = d.name AND
+    d.encrypted = 1 AND m.path = '/';
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Has cloud flare DNS
+  platform: linux
+  query: SELECT 1 FROM dns_resolvers WHERE type='nameserver' AND address LIKE '1.1.1.1';
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description: Policy triggers automatic install of Brave on each host that's missing
+    this software.
+  install_software:
+    hash_sha256: 002d4a409827df50674c205fcf2415e855580e385eb422dc44d6a9e61f34f83a
+      # Brave (Brave-Browser-arm64.dmg) version 135.1.77.97
+  name: '[Install software] Brave'
+  platform: darwin
+  query: SELECT 1 FROM apps WHERE bundle_identifier = 'com.brave.Browser';
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description: Policy triggers automatic install of Microsoft AutoUpdate.app on each
+    host that's missing this software.
+  install_software:
+    hash_sha256: d5fce20926d01bc6038a5e2ef39a9c7313bfcb4ed29309745d844c5cc2bced5b
+      # Microsoft AutoUpdate (CompanyPortal-Installer.pkg) version 4.78, 4.79
+  name: '[Install software] Microsoft AutoUpdate.app (pkg)'
+  platform: darwin
+  query: SELECT 1 FROM apps WHERE bundle_identifier = 'com.microsoft.autoupdate2';
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  name: Has Cloudflare DNS
+  platform: linux
+  query: SELECT 1 FROM dns_resolvers WHERE type='nameserver' AND address LIKE '1.1.1.1';
+  resolution:
+  run_script:
+    path: ../lib/dales-super-cool-test-team/scripts/set_dns_cloudflare.sh
+queries:
+- automations_enabled: false
+  description:
+  discard_data: false
+  interval: 300
+  logging: snapshot
+  min_osquery_version:
+  name: Test this query
+  observer_can_run: false
+  platform:
+  query: SELECT * FROM osquery_info;
+- automations_enabled: false
+  description:
+  discard_data: false
+  interval: 300
+  logging: snapshot
+  min_osquery_version:
+  name: Copy of Test this query
+  observer_can_run: false
+  platform:
+  query: SELECT * FROM osquery_flags;
+software:
+  packages:
+  - hash_sha256: f7aeedadc2c96f24d16271f879a43cbb8f29bfbfa17edd4ce58b8aa7f481018d
+      # Fleet osquery (fleet-ishl-osquery.msi) version 1.38.1, 1.40.1
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/fleet-osquery-windows-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/fleet-osquery-windows-uninstall
+  - hash_sha256: d5fce20926d01bc6038a5e2ef39a9c7313bfcb4ed29309745d844c5cc2bced5b
+      # Microsoft AutoUpdate (CompanyPortal-Installer.pkg) version 4.78, 4.79
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/microsoft-autoupdate-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/microsoft-autoupdate-darwin-uninstall
+  - hash_sha256: 002d4a409827df50674c205fcf2415e855580e385eb422dc44d6a9e61f34f83a
+      # Brave (Brave-Browser-arm64.dmg) version 135.1.77.97
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/brave-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/brave-darwin-uninstall
+  - hash_sha256: 416f5edf1e9fb938ccaea798adfe177ef7a4072c95a527cb460f3417d1ef5266
+      # Firefox (Firefox 136.0.1.dmg) version 136.0.1
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/firefox-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/firefox-darwin-uninstall
+  - hash_sha256: 1cfb67d7023bc6bc7b1e3c8ccf5c891a1bad22876df77f3fbc77d27877cc7b9d
+      # com.scriptingosx.desktoppr (desktoppr-0.5-218.pkg) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/comscriptingosxdesktoppr-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/comscriptingosxdesktoppr-darwin-uninstall
+  - hash_sha256: 3b60cf7e078044426b87191f70d936f71a8e6db4a496d5aaa4648fec2941eb93
+      # DISTRIBUTION_TITLE (Sentinel-Release-24-3-2-7753_macos_v24_3_2_7753.pkg) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/distributiontitle-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/distributiontitle-darwin-uninstall
+  - hash_sha256: 8af531a86a43c193db1a8ea1b6f10f762c2f77f7d5ca50fde5f57cbe95f23b53
+      # Falcon (FalconSensorMacOS.MaverickGyr(2).pkg) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/falcon-darwin-install
+    post_install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/falcon-darwin-postinstall
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/falcon-darwin-uninstall
+  - hash_sha256: 3d800f4d18f4454e329f5391243e6ab660ca54aadbef09ec5d7176947b784b7f
+      # Google Chrome (GoogleChrome.pkg) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/google-chrome-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/google-chrome-darwin-uninstall
+  - hash_sha256: 429ca4df2f6632b8617c00a42e002414729672eee751b3cb18b9778a0fc3749c
+      # Google Drive (GoogleDriveSetup.exe) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/google-drive-windows-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/google-drive-windows-uninstall
+  - hash_sha256: d8d97c6516b995b5bbd4c84460c3d539b3b8c152c909e2231cb07907768ea4be
+      # mozillaDesktop (mozillaDesktop(1).pkg) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/mozilladesktop-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/mozilladesktop-darwin-uninstall
+  - hash_sha256: fbdf7b43ebad4c59b97409f4aeb07794a6542519c2fbf2fcadf96c90f6034077
+      # Postman (osx_arm64.zip) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/postman-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/postman-darwin-uninstall
+  - hash_sha256: 1b4e6a0560d561749da812d5ce465d92ad1de700e60327ae5027f0197716b249
+      # wallpaper (mozillaDesktopv2.pkg) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/wallpaper-darwin-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/wallpaper-darwin-uninstall
+  - hash_sha256: 5ea111b7cdcb5f72bbe376c3f2979d0cf8d7c5736d6dcce35f365bf622bb0da3
+      # Xmind (Xmind-for-Windows-x64bit-25.01.01061-202501070746.exe) version 
+    install_script:
+      path: ../lib/dales-super-cool-test-team/scripts/xmind-windows-install
+    uninstall_script:
+      path: ../lib/dales-super-cool-test-team/scripts/xmind-windows-uninstall
+team_settings:
+  features:
+    enable_host_users: true
+    enable_software_inventory: true
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+  secrets:
+  - secret: # TODO: Add your enroll secrets here
+  webhook_settings:
+    failing_policies_webhook:
+      destination_url: https://webhook.site/5badaf4c-82bf-49e6-8d30-db534de9e244
+      enable_failing_policies_webhook: true
+      host_batch_size: 0
+      policy_ids:
+      - 60
+      - 13
+    host_status_webhook:

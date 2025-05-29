@@ -1,0 +1,67 @@
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_migration:
+    enable: false
+    mode:
+    webhook_url:
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  - path: ../lib/no-team/scripts/winget_test.ps1
+  windows_enabled_and_configured: true
+  windows_migration_enabled: true
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: No team
+policies:
+- calendar_events_enabled: false
+  critical: false
+  description: Laptop may be missing necessary software, leading to operational issues
+    or difficulties in connecting to remote servers.
+  install_software:
+    hash_sha256: 6c297c89d32d7fb5c6d10b1da2612c9557a5126715c4a78690d5d8067488f5f2
+      # PuTTY release 0.81 (64-bit) (putty-64bit-0.81-installer.msi) version 
+  name: PUTTY INSTALLED
+  platform: windows
+  query: SELECT 1 FROM programs WHERE name="PuTTY release 0.81 (64-bit)"
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description: Policy triggers automatic install of Microsoft AutoUpdate.app on each
+    host that's missing this software.
+  install_software:
+    hash_sha256: 3b53a27a7a4a3fb237959135fb0d9d28ea829ea2a376567ae254df09fb61d2a7
+      # Microsoft AutoUpdate (CompanyPortal-Installer.pkg) version 4.77
+  name: '[Install software] Microsoft AutoUpdate.app (pkg)'
+  platform: darwin
+  query: SELECT 1 FROM apps WHERE bundle_identifier = 'com.microsoft.autoupdate2';
+  resolution:
+software:
+  packages:
+  - hash_sha256: 3b53a27a7a4a3fb237959135fb0d9d28ea829ea2a376567ae254df09fb61d2a7
+      # Microsoft AutoUpdate (CompanyPortal-Installer.pkg) version 4.77
+    install_script:
+      path: ../lib/no-team/scripts/microsoft-autoupdate-darwin-install
+    uninstall_script:
+      path: ../lib/no-team/scripts/microsoft-autoupdate-darwin-uninstall
+  - hash_sha256: c4d9860f38683ba182d34c7a2b3b8157ec3e76498e0863d3ddab0c1a73360fb0
+      # Firefox (Firefox 138.0.1.dmg) version 134.0.1
+    install_script:
+      path: ../lib/no-team/scripts/firefox-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/no-team/scripts/firefox-darwin-uninstall
+  - hash_sha256: 6c297c89d32d7fb5c6d10b1da2612c9557a5126715c4a78690d5d8067488f5f2
+      # PuTTY release 0.81 (64-bit) (putty-64bit-0.81-installer.msi) version 
+    install_script:
+      path: ../lib/no-team/scripts/putty-release-081-64bit-windows-install
+    uninstall_script:
+      path: ../lib/no-team/scripts/putty-release-081-64bit-windows-uninstall

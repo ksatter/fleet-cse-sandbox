@@ -1,0 +1,173 @@
+agent_options:
+  config:
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 59
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+  overrides:
+    platforms:
+      darwin:
+        auto_table_construction:
+          chrome_history:
+            columns:
+            - last_visited
+            - url
+            - title
+            - visit_count
+            path: /Users/%/Library/Application Support/Google/Chrome/Default/History
+            query: SELECT datetime(last_visit_time/1000000-11644473600, "unixepoch")
+              as last_visited, url, title, visit_count FROM urls;
+      linux:
+        auto_table_construction:
+          chrome_history:
+            columns:
+            - last_visited
+            - url
+            - title
+            - visit_count
+            path: /home/%/.config/google-chrome/Default/History
+            query: SELECT datetime(last_visit_time/1000000-11644473600, "unixepoch")
+              as last_visited, url, title, visit_count FROM urls;
+          test_table:
+            columns:
+            - ID
+            - name
+            path: /home/%/test.db
+            query: SELECT * FROM test_table
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  - path: ../lib/masons-alright-test-team/scripts/installtest.sh
+  - path: ../lib/masons-alright-test-team/scripts/test1.sh
+  windows_enabled_and_configured: true
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: Mason's Alright Test Team
+policies:
+- calendar_events_enabled: false
+  critical: false
+  description: |-
+    Policy triggers automatic install of webex on each host that's missing this software.
+    Software won't be installed on Linux hosts with RPM-based distributions because this policy's query is written to always pass on these hosts.
+  install_software:
+    hash_sha256: 4827d3bea7e3856006d75240486731f0bef531875d3b8ee058efc95270a9d79f
+      # webex (Webex.deb) version 
+  name: '[Install software] webex (deb)'
+  platform: linux
+  query: "SELECT 1 WHERE EXISTS (\n\tSELECT 1 WHERE (SELECT COUNT(*) FROM deb_packages)
+    = 0\n) OR EXISTS (\n\tSELECT 1 FROM deb_packages WHERE name = 'webex'\n);"
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description: |-
+    Policy triggers automatic install of code on each host that's missing this software.
+    Software won't be installed on Linux hosts with RPM-based distributions because this policy's query is written to always pass on these hosts.
+  install_software:
+    hash_sha256: 42cdfa55cb63d707e21457b37672491735e79c7d3818e658438a07cb3871b5c2
+      # code (code_1.100.2-1747260578_amd64.deb) version 
+  name: '[Install software] code (deb)'
+  platform: linux
+  query: "SELECT 1 WHERE EXISTS (\n\tSELECT 1 WHERE (SELECT COUNT(*) FROM deb_packages)
+    = 0\n) OR EXISTS (\n\tSELECT 1 FROM deb_packages WHERE name = 'code'\n);"
+  resolution:
+queries:
+- automations_enabled: false
+  description: Selects all from chrome_extensions.
+  discard_data: false
+  interval: 3600
+  logging: snapshot
+  min_osquery_version:
+  name: Chrome Extensions
+  observer_can_run: false
+  platform: darwin,windows,linux,chrome
+  query: SELECT * FROM chrome_extensions;
+software:
+  packages:
+  - hash_sha256: dd846c64f807ccd564a1ce35abe456c2b3bd633f2ff0ec2172fa67d1a424e468
+      # 1Password (1Password-8.10.75-aarch64.zip) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/1password-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/1password-darwin-uninstall
+  - hash_sha256: 780491cb985d853e150402530e36ccfb3d85e42919e78aee97792638998d12af
+      # Adobe Acrobat Reader (AcroRdrDC_2500120467_MUI.dmg) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/adobe-acrobat-reader-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/adobe-acrobat-reader-darwin-uninstall
+  - hash_sha256: 42cdfa55cb63d707e21457b37672491735e79c7d3818e658438a07cb3871b5c2
+      # code (code_1.100.2-1747260578_amd64.deb) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/code-linux-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/code-linux-uninstall
+  - hash_sha256: c4d9860f38683ba182d34c7a2b3b8157ec3e76498e0863d3ddab0c1a73360fb0
+      # Firefox (Firefox 138.0.1.dmg) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/firefox-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/firefox-darwin-uninstall
+  - hash_sha256: 6c78fd77ae459aba822ea858ef0be7d8e61e1a3ebf68fbcdccaef9bed26ca77c
+      # Mozilla Firefox 138.0.3 x64 en-US (Firefox Setup 138.0.3.msi) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/mozilla-firefox-13803-x64-enus-windows-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/mozilla-firefox-13803-x64-enus-windows-uninstall
+  - hash_sha256: aa7c1f5a8f2b5d7e1fa4daa66cc410f536b55a335fbb118148b5a5d79da5d420
+      # slack (slack-4.43.51-0.1.el8.x86_64.rpm) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/slack-linux-install
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/slack-linux-uninstall
+  - hash_sha256: 4827d3bea7e3856006d75240486731f0bef531875d3b8ee058efc95270a9d79f
+      # webex (Webex.deb) version 
+    install_script:
+      path: ../lib/masons-alright-test-team/scripts/webex-linux-install
+    uninstall_script:
+      path: ../lib/masons-alright-test-team/scripts/webex-linux-uninstall
+team_settings:
+  features:
+    additional_queries:
+      linux_kernel_info: SELECT * FROM file_lines WHERE PATH = "/proc/version"
+      time: SELECT * FROM time
+      windows_kernes_info: SELECT version FROM kernel_info;
+    detail_query_overrides:
+      disk_encryption_linux:
+    enable_host_users: true
+    enable_software_inventory: false
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+  secrets:
+  - secret: # TODO: Add your enroll secrets here
+  webhook_settings:
+    failing_policies_webhook:
+      destination_url:
+      enable_failing_policies_webhook: false
+      host_batch_size: 0
+      policy_ids:
+    host_status_webhook:

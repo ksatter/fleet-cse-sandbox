@@ -1,0 +1,68 @@
+agent_options:
+  config:
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 10
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+  update_channels:
+    desktop: stable
+    orbit: stable
+    osqueryd: stable
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  windows_enabled_and_configured: true
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: Test
+policies:
+queries:
+software:
+  packages:
+  - hash_sha256: d2ecd42e9bb00bc41cc27919bf3c4b208189357e166befd25242f9e4485759df
+      # apacheds (apacheds-2.0.0.AM27-amd64.deb) version 
+    install_script:
+      path: ../lib/test/scripts/apacheds-linux-install
+    uninstall_script:
+      path: ../lib/test/scripts/apacheds-linux-uninstall
+  - hash_sha256: 2e2923bea718b4a059a323994eef53412efac3393b5456e91776efc89d8a354e
+      # code (code_1.99.3-1744761595_amd64.deb) version 
+    install_script:
+      path: ../lib/test/scripts/code-linux-install
+    uninstall_script:
+      path: ../lib/test/scripts/code-linux-uninstall
+team_settings:
+  features:
+    enable_host_users: true
+    enable_software_inventory: true
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+  secrets:
+  - secret: # TODO: Add your enroll secrets here
+  webhook_settings:
+    failing_policies_webhook:
+      destination_url:
+      enable_failing_policies_webhook: false
+      host_batch_size: 0
+      policy_ids:
+    host_status_webhook:

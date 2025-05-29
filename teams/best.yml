@@ -1,0 +1,200 @@
+agent_options:
+  command_line_flags:
+    disable_audit: false
+    disable_events: false
+    enable_ntfs_event_publisher: true
+    enable_powershell_events_subscriber: true
+    enable_windows_events_publisher: true
+    enable_windows_events_subscriber: true
+  config:
+    auto_table_construction:
+      firefox_url_history:
+        columns:
+        - guid
+        - url
+        - title
+        - visit_count
+        - last_visit_date
+        - hidden
+        path: /Users/%/Library/Application Support/Firefox/Profiles/%/places.sqlite
+        query: SELECT guid, url, title, visit_count, last_visit_date,  hidden FROM
+          moz_places
+    decorators:
+      load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+    options:
+      disable_distributed: false
+      distributed_interval: 10
+      distributed_plugin: tls
+      distributed_tls_max_attempts: 3
+      logger_tls_endpoint: /api/osquery/log
+      logger_tls_period: 10
+      pack_delimiter: /
+controls:
+  enable_disk_encryption: false
+  ios_updates:
+    deadline:
+    minimum_version:
+  ipados_updates:
+    deadline:
+    minimum_version:
+  macos_updates:
+    deadline:
+    minimum_version:
+  scripts:
+  - path: ../lib/best/scripts/2025-02-11 test.sh
+  - path: ../lib/best/scripts/enable_fleetd_scripts_windows.ps1
+  - path: ../lib/best/scripts/fail.sh
+  - path: ../lib/best/scripts/winget_installtest.ps1
+  - path: ../lib/best/scripts/winget_prep.ps1
+  - path: ../lib/best/scripts/winget_test2.ps1
+  windows_enabled_and_configured: true
+  windows_updates:
+    deadline_days:
+    grace_period_days:
+name: Best
+policies:
+- calendar_events_enabled: false
+  critical: false
+  description:
+  install_software:
+    hash_sha256: b2c92114d8bb359b5e3713e45aeea33dce8ef7da40a4aea266f016df5bf2f966
+      # Fleet osquery (fleet-osquery.pkg) version 
+  name: Always Fail
+  platform: darwin,windows,linux,chrome
+  query: SELECT 1 WHERE 1 = 2;
+  resolution:
+- calendar_events_enabled: false
+  critical: false
+  description: 'The file is good. Embrace the good. '
+  name: Good file present
+  platform: darwin,windows,linux
+  query: SELECT 1 FROM file WHERE path like '/Users/%/Desktop/good.txt';
+  resolution: 'Create the good file. '
+  run_script:
+    path: ../lib/best/scripts/fail.sh
+queries:
+- automations_enabled: true
+  description:
+  discard_data: false
+  interval: 300
+  logging: snapshot
+  min_osquery_version:
+  name: Frequent query
+  observer_can_run: false
+  platform: darwin,windows,linux,chrome
+  query: SELECT * FROM osquery_info;
+- automations_enabled: true
+  description:
+  discard_data: false
+  interval: 300
+  logging: differential
+  min_osquery_version:
+  name: Differential query
+  observer_can_run: false
+  platform: darwin,windows,linux
+  query: SELECT * FROM file WHERE path like "/Users/%/look_here/%"
+software:
+  packages:
+  - hash_sha256: no_check # Google Chrome (googlechrome.dmg) version 135.0.7049.115
+    install_script:
+      path: ../lib/best/scripts/google-chrome-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/google-chrome-darwin-uninstall
+  - hash_sha256: ac89add013db53126c99387a9178781b8d67a69d4defad871d297cc7c4cfc603
+      # Visual Studio Code (VSCode-darwin-arm64.zip) version 1.99.3
+    install_script:
+      path: ../lib/best/scripts/visual-studio-code-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/visual-studio-code-darwin-uninstall
+  - hash_sha256: 8f6b53f866c1afb35e61b52d99bc83f2e5959eee41d80bb69996a31169957f90
+      # code (code_1.99.2-1744250061_amd64.deb) version 
+    install_script:
+      path: ../lib/best/scripts/code-linux-install
+    uninstall_script:
+      path: ../lib/best/scripts/code-linux-uninstall
+  - hash_sha256: 19c69b358a8ee1b94e308648a2853e398f4bff29f0f74f00ef2d1b462ced1d1c
+      # Docker (Docker.dmg) version 
+    install_script:
+      path: ../lib/best/scripts/docker-darwin-install
+    uninstall_script:
+      path: ../lib/best/scripts/docker-darwin-uninstall
+  - hash_sha256: b2c92114d8bb359b5e3713e45aeea33dce8ef7da40a4aea266f016df5bf2f966
+      # Fleet osquery (fleet-osquery.pkg) version 
+    install_script:
+      path: ../lib/best/scripts/fleet-osquery-darwin-install
+    uninstall_script:
+      path: ../lib/best/scripts/fleet-osquery-darwin-uninstall
+  - hash_sha256: 9e32af222a441f8f0858dd87191b5163e9c6fa86e73243b69eea63db04cac169
+      # Microsoft Edge (MicrosoftEdge-134.0.3124.83.pkg) version 
+    install_script:
+      path: ../lib/best/scripts/microsoft-edge-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/microsoft-edge-darwin-uninstall
+  - hash_sha256: 61828b387ee351773c0654a2131fc93695ab24fcc992ba415a4bc454c852bfed
+      # Microsoft Excel (Microsoft_Excel_16.95.25030928_Installer.pkg) version 
+    install_script:
+      path: ../lib/best/scripts/microsoft-excel-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/microsoft-excel-darwin-uninstall
+  - hash_sha256: 996fb003ab7ef5b2f6cac77ae5795bb322804259197a36469046ce3e233857c1
+      # Microsoft Teams (MicrosoftTeams.pkg) version 
+    install_script:
+      path: ../lib/best/scripts/microsoft-teams-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/microsoft-teams-darwin-uninstall
+  - hash_sha256: 71d647007d02faf9dd2c7911f91a1679cb3947b29203e381e0e2c88e05917446
+      # Microsoft Word (Microsoft_Word_16.95.25030928_Installer.pkg) version 
+    install_script:
+      path: ../lib/best/scripts/microsoft-word-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/microsoft-word-darwin-uninstall
+  - hash_sha256: 538e5c75bcc692a90c4c42d5023af7421898174bf02a6a0b561fd0f89cc59326
+      # slack-desktop (slack-desktop-4.43.51-amd64.deb) version 
+    install_script:
+      path: ../lib/best/scripts/slackdesktop-linux-install
+    uninstall_script:
+      path: ../lib/best/scripts/slackdesktop-linux-uninstall
+  - hash_sha256: 8aa702497bc0f899997562b206f33bfeff9d468ebdb1ff2099d4788c505b3df4
+      # TeamViewer (TeamViewer.pkg) version 
+    install_script:
+      path: ../lib/best/scripts/teamviewer-darwin-install
+    self_service: true
+    uninstall_script:
+      path: ../lib/best/scripts/teamviewer-darwin-uninstall
+  - hash_sha256: 4827d3bea7e3856006d75240486731f0bef531875d3b8ee058efc95270a9d79f
+      # webex (Webex.deb) version 
+    install_script:
+      path: ../lib/best/scripts/webex-linux-install
+    uninstall_script:
+      path: ../lib/best/scripts/webex-linux-uninstall
+  - hash_sha256: f80d2ed1464be0fbae059ea2aa8d88ba1ce195018e052fbffdb9d5b0e19aa68e
+      # zoom (zoom_amd64 (3).deb) version 
+    install_script:
+      path: ../lib/best/scripts/zoom-linux-install
+    uninstall_script:
+      path: ../lib/best/scripts/zoom-linux-uninstall
+team_settings:
+  features:
+    enable_host_users: true
+    enable_software_inventory: true
+  host_expiry_settings:
+    host_expiry_enabled: false
+    host_expiry_window: 0
+  integrations:
+  secrets:
+  - secret: # TODO: Add your enroll secrets here
+  webhook_settings:
+    failing_policies_webhook:
+      destination_url:
+      enable_failing_policies_webhook: false
+      host_batch_size: 0
+      policy_ids:
+    host_status_webhook:
