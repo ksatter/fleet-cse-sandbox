@@ -1,2 +1,2 @@
-url: ${GOOGLE_CHROME_URL}
+url: ${CHROME_DOWNLOAD_URL}
 self_service: true
