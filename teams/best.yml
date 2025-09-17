@@ -15,4 +15,5 @@ team_settings:
   secrets:
     - secret: "$FLEET_BEST_ENROLL_SECRET"
 software:
-  - path: ../lib/software/google-chrome.yml
+  packages:
+    - path: ../lib/software/google-chrome.yml
