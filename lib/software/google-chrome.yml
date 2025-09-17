@@ -1,2 +1,2 @@
-url: ${PACKAGE_REPO_URL}/google-chrome-stable_current_amd64.deb
+url: ${GOOGLE_CHROME_URL}
 self_service: true
