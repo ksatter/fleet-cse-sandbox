@@ -10,7 +10,7 @@ queries:
 agent_options:
   path: ../lib/agent-options.yml
 controls:
-  scripts:
+  apple_setup_assistant: ../lib/macos/enrollment-profiles/automatic-enrollment.dep.json
 team_settings:
   secrets:
     - secret: "$FLEET_WORKSTATIONS_ENROLL_SECRET"
