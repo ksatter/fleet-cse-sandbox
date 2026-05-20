@@ -17,4 +17,4 @@ org_settings:
 software:
 labels:
   - name: manual label
-    type: "manual"
+    label_membership_type: "manual"
