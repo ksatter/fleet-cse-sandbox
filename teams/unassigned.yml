@@ -12,7 +12,4 @@ agent_options:
 controls:
   setup_experience:
     apple_setup_assistant: ../lib/macos/enrollment-profiles/automatic-enrollment.dep.json
-team_settings:
-  secrets:
-    - secret: "$FLEET_WORKSTATIONS_ENROLL_SECRET"
 software:
