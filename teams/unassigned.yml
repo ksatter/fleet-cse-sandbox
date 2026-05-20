@@ -6,7 +6,6 @@
 
 name: Unassigned
 policies:
-queries:
 agent_options:
   path: ../lib/agent-options.yml
 controls:
