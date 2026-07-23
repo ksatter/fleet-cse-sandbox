@@ -4,12 +4,10 @@ e# Only available in Fleet Premium.
 
 # To add another team, create a new file in the teams/ directory and copy and paste the contents from this file.
 
-name: Workstations - Rename 
+name: Work
 policies:
 queries:
 agent_options:
   path: ../lib/agent-options.yml
 software:
 labels:
-  - name: manual label
-    label_membership_type: "manual"
