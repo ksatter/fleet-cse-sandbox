@@ -6,7 +6,6 @@
 
 name: Unassigned
 policies:
-agent_options:
-  path: ../lib/agent-options.yml
+
 
 
