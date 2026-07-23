@@ -9,9 +9,6 @@ policies:
 queries:
 agent_options:
   path: ../lib/agent-options.yml
-controls:
-  setup_experience:
-    apple_setup_assistant: ../lib/macos/enrollment-profiles/automatic-enrollment.dep.json
 software:
 labels:
   - name: manual label
